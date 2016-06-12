@@ -168,9 +168,7 @@ int main(int argc, char *argv[])
 {
   int opt; /* return from getopt() */
 
-  <+$BASENAME$+>_init(); /* initialization function */
-
-  IFDEBUG("Starting optarg loop...\n");
+  IFDEBUG("Starting optarg loop...");
 
   /* getopt() configured options:
    *        -h  help
@@ -199,6 +197,8 @@ int main(int argc, char *argv[])
   if(verb)
     printf("Verbose level set at: %d\n", verb);
   
+  <+$BASENAME$+>_init(); /* initialization function */
+
   /* ...and we are done */
   /* Write your code here... */
 
