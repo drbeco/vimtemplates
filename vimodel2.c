@@ -62,7 +62,9 @@
 /*
  * Instrucoes para compilar:
  *   $gcc <+$BASENAME$+>.c -o <+$BASENAME$+>.x -Wall
- *        -Wextra -ansi -pedantic-errors -g -O0 -DDEBUG=1
+ *        -Wextra -ansi -pedantic-errors -g -O0 -DDEBUG=1 -DVERSION="0.1.160612.142044" 
+ *   ou preferencialmente inclua um makefile e use:
+ *   $make
  */
 
 /* ---------------------------------------------------------------------- */
@@ -99,12 +101,12 @@
 /* #include "libeco.h" */ /* I/O, Math, Sound, Color, Portable Linux/Windows */
 /* #include "<+$BASENAME$+>.h" */ /* To be created for this template if needed */
 
-
-
 /* ---------------------------------------------------------------------- */
 /* definitions */
 
-#define VERSION (<+$VERSION$+>) /**< Version Number */
+#ifndef VERSION /* gcc -DVERSION="0.1.160612.142628" */
+#define VERSION "<+$VERSION$+>" /**< Version Number (string) */
+#endif
 
 /* Debug */
 #ifndef DEBUG /* gcc -DDEBUG=1 */
@@ -127,9 +129,7 @@ static int verb=0; /**< verbose level, global within the file */
 
 void help(void); /* print some help */
 void copyr(void); /* print version and copyright information */
-float version(void); /* returns the version float number YYMMDD.hhmmss */
 void <+$BASENAME$+>_init(void); /* global initialization function */
-int funcexample(int i, int *o, int *z); /* just an example with complete doxygen fields */
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -199,9 +199,14 @@ int main(int argc, char *argv[])
 
   if(verb)
     printf("Verbose level set at: %d\n", verb);
+  
   /* ...and we are done */
+  /* Write your code here... */
+
   return EXIT_SUCCESS;
 }
+
+/* Write your functions here... */
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -244,7 +249,7 @@ void help(void)
 void copyr(void)
 {
   IFDEBUG("copyr()");
-  printf("%s - Version %13.6f\n", "<+$BASENAME$+>", version());
+  printf("%s - Version %s\n", "<+$BASENAME$+>", VERSION);
   printf("\nCopyright (C) %d %s <%s>, GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>. This  is  free  software:  you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.\n\n", <+$YEAR$+>, "<+$AUTHOR$+>", "<+$EMAIL$+>");
   if(verb>3) printf("copyr(): Verbose: %d\n", verb); /* -vvvv */
   exit(EXIT_FAILURE);
@@ -253,33 +258,42 @@ void copyr(void)
 /* ---------------------------------------------------------------------- */
 /**
  * @ingroup GroupUnique
- * @brief Returns the version number
- * @details This function may be used to update easily the version number,
- * instead of using the MACRO.
- * @return Float VERSION in the form YYMMDD.hhmmss
- * @author <+$AUTHOR$+>
- * @version <+$VERSION$+>
- * @date <+$DATE$+>
- *
- */
-float version(void)
-{
-  IFDEBUG("version()");
-  if(verb>3)
-    printf("Version %13.6f\n", VERSION); /* -vvvv */
-  return (VERSION); /* YYMMDD.hhmmss */
-}
-
-/* ---------------------------------------------------------------------- */
-/**
- * @ingroup GroupUnique
  * @brief This function initializes some operations before start
- * @details Details to be written
+ * @details Details to be written in
+ * multiple lines
+ *
+ * @pre You need to call foo() before calling this function
+ *
+ * @param[in] i Input parameter that does bla
+ * @param[out] o Parameter that outputs ble
+ * @param[in,out] z The @a z variable is used as input and output
+ *
+ * @retval 0 Returned when bli
+ * @retval 1 Error code: function returned blo
+ *
+ * @par Example
+ * @code
+ *    if(x==funcexample(i, o, z))
+ *       printf("And that is it\n");
+ * @endcode
+ *
  * @return Void
- * @todo Need to implement it. Its empty now.
+ *
+ * @warning Be carefull with blu
+ * @todo Need to implement it. Its empty now. This doxygen tags are overwhelming.
+ * Mandatory tags are: ingroup, brief, details, param, return, author and date.
+ * The others are optional.
+ * 
+ * @deprecated This function will be deactivated in version +33
+ * @see help()
+ * @see copyr()
+ * @bug There is a bug with x greater than y
+ * @note You can read more about it at <<a href="http://<+$WEBPAGE$+>"><+$WEBPAGE$+></a>>
+ *
  * @author <+$AUTHOR$+>
  * @version <+$VERSION$+>
  * @date <+$DATE$+>
+ * @copyright Use this tag only if not the same as the whole file
  *
  */
 void <+$BASENAME$+>_init(void)
@@ -290,49 +304,6 @@ void <+$BASENAME$+>_init(void)
 }
 
 /* ---------------------------------------------------------------------- */
-/**
- * @ingroup GroupUnique
- * @brief This function does bla bla bla
- * @details It works by doing first a bla, followed by two bla's, giving
- * bla bla bla
- *
- * @pre You need to call foo() before calling this function
- *
- * @param[in] i Input parameter that does bla
- * @param[out] o Parameter that outputs ble
- * @param[in,out] z The @a z variable is used as input and output
- *
- * @return The returned value @a r means rhit
- * @retval 0 Returned when bli
- * @retval 1 Error code: function returned blo
- *
- * @par Example
- * @code
- *    if(x==funcexample(i, o, z))
- *       printf("And that is it\n");
- * @endcode
- *
- * @warning   Be carefull with blu
- * @deprecated This function will be deactivated in version +33
- * @see help()
- * @see copyr()
- * @bug There is a bug with x greater than y
- * @todo Need to change its output format to conform POSIX
- * @note You can read more about it at <<a href="http://<+$WEBPAGE$+>"><+$WEBPAGE$+></a>>
- * @author <+$AUTHOR$+>
- * @version <+$VERSION$+>
- * @date <+$DATE$+>
- * @copyright Only if not the same as the whole file
- *
- */
-int funcexample(int i, int *o, int *z)
-{
-  IFDEBUG("funcexample()");
-  i += *z;
-  *o = (*z)++;
-  return i-4;
-}
+/* vi: set ai et ts=4 sw=4 tw=0 wm=0 fo=croql : C config for Vim modeline */
+/* Template by Dr. Beco <rcb at beco dot cc> Version 20160612.142044      */
 
-/* ---------------------------------------------------------------------- */
-/* vi: set ai et ts=2 sw=2 tw=0 wm=0 fo=croql : C config for Vim modeline */
-/* Template by Dr. Beco <rcb at beco dot cc> Version 20150619.231433      */
