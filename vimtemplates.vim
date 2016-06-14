@@ -35,6 +35,7 @@
 "
 " Asked in the prompt, with a default value set:
 " #BRIEF# => a brief explanation of what the program do (used by DoxyGen)
+" #PROGRAM# => the name of the binary program to compile (makefile)
 "
 " -----------------------------------------------------------------
 " ~/.vimrc configuration:
@@ -78,6 +79,12 @@ let s:searchSpecial = '$^*[]\:'
 
 let s:AskTagDefault = {}
 let s:AskTagDefault["BRIEF"] = "Brief description"
+let s:AskTagDefault["PROGRAM"] = "a_out"
+let s:AskTagDefault["MAJOR"] = "0"
+let s:AskTagDefault["MINOR"] = "1"
+let s:AskTagDefault["DDEBUG"] = "1"
+let s:AskTagDefault["CFLAGS"] = "-Wall -Wextra -g -O0 -c -std=gnu99"
+let s:AskTagDefault["LDLIBS"] = "-lm -lncurses -lpthread -lgmp"
 let g:file_template_default={}
 let g:file_template_default["default"]="vimodel1"
  
