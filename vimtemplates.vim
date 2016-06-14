@@ -105,12 +105,19 @@ function! ListAvailableTemplates(A,L,P)
 	let resultDict = {}
 	if len(s:bufferFileName) > 0
 		let extension = expand('%:e')
-		let files = split(globpath(g:VIMFILESDIR."templates/", '*.'.extension), '\n')
+		if len(extension) > 0
+			let files = split(globpath(g:VIMFILESDIR."templates/", '*.'.extension), '\n')
 
-		for f in files
-			let root = fnamemodify(f, ':t:r')
+			for f in files
+				let root = fnamemodify(f, ':t:r')
+				let resultDict[root] = ''
+			endfor
+		else
+			let file = g:VIMFILESDIR."templates/".s:bufferFileName
+			let root = fnamemodify(file, ':t:r')
 			let resultDict[root] = ''
-		endfor
+		endif
+
 		let result = keys(resultDict)
 	endif
 	return result
@@ -135,7 +142,12 @@ function! LoadFileTemplate(name)
 	endif
 
 	if len(s:bufferFileName) > 0
-		execute "silent! 0r ".g:VIMFILESDIR."templates/".tolower(template_name).".".expand('%:e')
+		if(len(expand('%:e'))) != 0
+			execute "silent! 0r ".g:VIMFILESDIR."templates/".tolower(template_name).".".expand('%:e')
+		else
+			execute "silent! 0r ".g:VIMFILESDIR."templates/".template_name
+		endif
+
 		syn match vimTemplateMarker "<+.++>" containedin=ALL
 		call ExpandTemplateNames()
 		call AskForOtherNames()
@@ -147,7 +159,11 @@ function! AddTemplate(name)
 	let template_name = a:name
 
 	if len(s:bufferFileName) > 0
-		execute "silent! r ".g:VIMFILESDIR."templates/".tolower(template_name).".".expand('%:e')
+		if(len(expand('%:e'))) != 0
+			execute "silent! r ".g:VIMFILESDIR."templates/".tolower(template_name).".".expand('%:e')
+		else
+			execute "silent! r ".g:VIMFILESDIR."templates/".template_name
+		endif
 		syn match vimTemplateMarker "<+.++>" containedin=ALL
 		call ExpandTemplateNames()
 		call AskForOtherNames()
