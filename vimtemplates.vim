@@ -36,6 +36,11 @@
 " Asked in the prompt, with a default value set:
 " #BRIEF# => a brief explanation of what the program do (used by DoxyGen)
 " #PROGRAM# => the name of the binary program to compile (makefile)
+" #MAJOR# => the major version number (default to 0)
+" #MINOR# => the minor version number (default to 1)
+" #DDEBUG# => the DEBUG flag (0 or 1, default to 1)
+" #CFLAGS# => the compiler C flags (gcc) (default to -Wall -Wextra -g -O0 -c -std=gnu99)
+" #LDLIBS# => the linker flags (default to -lm -lncurses -lpthread -lgmp)
 "
 " -----------------------------------------------------------------
 " ~/.vimrc configuration:
