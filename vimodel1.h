@@ -65,10 +65,13 @@
 /* ---------------------------------------------------------------------- */
 /* includes */
 
+/* #include <stdio.h> */ /* Standard I/O functions */
+/* #include <stdlib.h> */ /* Miscellaneous functions (rand, malloc, srand)*/
+/* #include <getopt.h> */ /* get options from system argc/argv */
+
 /* #include <time.h> */ /* Time and date functions */
 /* #include <math.h> */ /* Mathematics functions */
 /* #include <string.h> */ /* Strings functions definitions */
-/* #include <assert.h> */ /* Verify assumptions with assert */
 /* #include <dlfcn.h> */ /* Dynamic library */
 /* #include <malloc.h> */ /* Dynamic memory allocation */
 /* #include <unistd.h> */ /* UNIX standard function */
@@ -95,18 +98,38 @@
 /* ---------------------------------------------------------------------- */
 /* definitions */
 
-#define VERSION (<+$VERSION$+>) /**< Version Number */
-#define DEBUG 0 /**< Activate debug mode */
-#define BUFF 256 /**< String buffer */
+#ifndef VERSION /* gcc -DVERSION="0.1.160612.142628" */
+#define VERSION "<+$VERSION$+>" /**< Version Number (string) */
+#endif
+
+/* Debug */
+#ifndef DEBUG /* gcc -DDEBUG=1 */
+#define DEBUG 0 /**< Activate/deactivate debug mode */
+#endif
+
+#if DEBUG==0
+#define NDEBUG
+#endif
+/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */ 
+
+/** @brief Debug message if DEBUG on */
+#define IFDEBUG(M) if(DEBUG) fprintf(stderr, "[DEBUG file:%s line:%d]: " M "\n", __FILE__, __LINE__); else {;}
+
+/* limits */
+#define SBUFF 256 /**< String buffer */
+
+/* ---------------------------------------------------------------------- */
+/* globals */
+
+static int verb = 0; /**< verbose level, global within the file */
 
 /* ---------------------------------------------------------------------- */
 /* prototypes */
 
 void help(void); /**< Prints help information and exit */
 void copyr(void); /**< Prints copyright information and exit */
-int funcexample(int i, int *o, int *z); /**< This function does bla bla bla */
-void <+$BASENAME$+>_Init(void);  /**< Initializes some operations before start */
-void <+$BASENAME$+>_Update(void); /**< Updates values during program cycle */
+void <+$BASENAME$+>_init(void);  /**< Initializes some operations before start */
+void <+$BASENAME$+>_update(void); /**< Updates values during program cycle */
 
 #endif /* NOT def _<+$UBASENAME$+>_H */
 
