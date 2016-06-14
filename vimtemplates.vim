@@ -113,9 +113,11 @@ function! ListAvailableTemplates(A,L,P)
 				let resultDict[root] = ''
 			endfor
 		else
-			let file = g:VIMFILESDIR."templates/".s:bufferFileName
-			let root = fnamemodify(file, ':t:r')
-			let resultDict[root] = ''
+			let files = split(globpath(g:VIMFILESDIR."templates/", s:bufferFileName.'*'), '\n')
+			for f in files
+				let root = fnamemodify(f, ':t:r')
+				let resultDict[root] = ''
+			endfor
 		endif
 
 		let result = keys(resultDict)
