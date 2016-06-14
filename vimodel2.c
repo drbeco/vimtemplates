@@ -61,9 +61,19 @@
 /*
  * Instrucoes para compilar:
  *   $gcc <+$BASENAME$+>.c -o <+$BASENAME$+>.x -Wall
- *        -Wextra -ansi -pedantic-errors -g -O0 -DDEBUG=1 -DVERSION="0.1.160612.142044" 
+ *        -Wextra -ansi -pedantic-errors -g -O0 -DDEBUG=1 -DVERSION="0.1.160612.142044"
  *   ou preferencialmente inclua um makefile e use:
  *   $make
+ *
+ * Modelo de indentacao:
+ * Estilo: --style=allman ou -A1
+ *
+ * Opcoes: -A1 -s4 -k3 -xj -SCNeUpv
+ *
+ *  * No vi use:
+ *      :% !astyle -A1 -s4 -k3 -xj -SCNeUpv
+ *  * No linux:
+ *      $astlye -A1 -s4 -k3 -xj -SCNeUpv <+$BASENAME$+>.c
  */
 
 /* ---------------------------------------------------------------------- */
@@ -76,7 +86,6 @@
 /* #include <time.h> */ /* Time and date functions */
 /* #include <math.h> */ /* Mathematics functions */
 /* #include <string.h> */ /* Strings functions definitions */
-/* #include <assert.h> */ /* Verify assumptions with assert */
 /* #include <dlfcn.h> */ /* Dynamic library */
 /* #include <malloc.h> */ /* Dynamic memory allocation */
 /* #include <unistd.h> */ /* UNIX standard function */
@@ -112,6 +121,11 @@
 #define DEBUG 0 /**< Activate/deactivate debug mode */
 #endif
 
+#if DEBUG==0
+#define NDEBUG
+#endif
+/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */ 
+
 /** @brief Debug message if DEBUG on */
 #define IFDEBUG(M) if(DEBUG) fprintf(stderr, "[DEBUG file:%s line:%d]: " M "\n", __FILE__, __LINE__); else {;}
 
@@ -121,7 +135,7 @@
 /* ---------------------------------------------------------------------- */
 /* globals */
 
-static int verb=0; /**< verbose level, global within the file */
+static int verb = 0; /**< verbose level, global within the file */
 
 /* ---------------------------------------------------------------------- */
 /* prototypes */
@@ -166,43 +180,43 @@ void <+$BASENAME$+>_init(void); /* global initialization function */
  */
 int main(int argc, char *argv[])
 {
-  int opt; /* return from getopt() */
+    int opt; /* return from getopt() */
 
-  IFDEBUG("Starting optarg loop...");
+    IFDEBUG("Starting optarg loop...");
 
-  /* getopt() configured options:
-   *        -h  help
-   *        -V  version
-   *        -v  verbose
-   */
-  opterr = 0;
-  while((opt = getopt(argc, argv, "vhV")) != EOF)
-    switch(opt)
-    {
-      case 'h':
-        help();
-        break;
-      case 'V':
-        copyr();
-        break;
-      case 'v':
-        verb++;
-        break;
-      case '?':
-      default:
-        printf("Type\n\t$man %s\nor\n\t$%s -h\nfor help.\n\n", argv[0], argv[0]);
-        return EXIT_FAILURE;
-    }
+    /* getopt() configured options:
+     *        -h  help
+     *        -V  version
+     *        -v  verbose
+     */
+    opterr = 0;
+    while((opt = getopt(argc, argv, "vhV")) != EOF)
+        switch(opt)
+        {
+            case 'h':
+                help();
+                break;
+            case 'V':
+                copyr();
+                break;
+            case 'v':
+                verb++;
+                break;
+            case '?':
+            default:
+                printf("Type\n\t$man %s\nor\n\t$%s -h\nfor help.\n\n", argv[0], argv[0]);
+                return EXIT_FAILURE;
+        }
 
-  if(verb)
-    printf("Verbose level set at: %d\n", verb);
-  
-  <+$BASENAME$+>_init(); /* initialization function */
+    if(verb)
+        printf("Verbose level set at: %d\n", verb);
 
-  /* ...and we are done */
-  /* Write your code here... */
+    <+$BASENAME$+>_init(); /* initialization function */
 
-  return EXIT_SUCCESS;
+    /* ...and we are done */
+    /* Write your code here... */
+
+    return EXIT_SUCCESS;
 }
 
 /* Write your functions here... */
@@ -220,18 +234,18 @@ int main(int argc, char *argv[])
  */
 void help(void)
 {
-  IFDEBUG("help()");
-  printf("%s - %s\n", "<+$BASENAME$+>", "<+#BRIEF#+>");
-  printf("\nUsage: %s [-h|-v]\n", "<+$BASENAME$+>");
-  printf("\nOptions:\n");
-  printf("\t-h,  --help\n\t\tShow this help.\n");
-  printf("\t-V,  --version\n\t\tShow version and copyright information.\n");
-  printf("\t-v,  --verbose\n\t\tSet verbose level (cumulative).\n");
-  /* add more options here */
-  printf("\nExit status:\n\t0 if ok.\n\t1 some error occurred.\n");
-  printf("\nTodo:\n\tLong options not implemented yet.\n");
-  printf("\nAuthor:\n\tWritten by %s <%s>\n\n", "<+$AUTHOR$+>", "<+$EMAIL$+>");
-  exit(EXIT_FAILURE);
+    IFDEBUG("help()");
+    printf("%s - %s\n", "<+$BASENAME$+>", "<+#BRIEF#+>");
+    printf("\nUsage: %s [-h|-v]\n", "<+$BASENAME$+>");
+    printf("\nOptions:\n");
+    printf("\t-h,  --help\n\t\tShow this help.\n");
+    printf("\t-V,  --version\n\t\tShow version and copyright information.\n");
+    printf("\t-v,  --verbose\n\t\tSet verbose level (cumulative).\n");
+    /* add more options here */
+    printf("\nExit status:\n\t0 if ok.\n\t1 some error occurred.\n");
+    printf("\nTodo:\n\tLong options not implemented yet.\n");
+    printf("\nAuthor:\n\tWritten by %s <%s>\n\n", "<+$AUTHOR$+>", "<+$EMAIL$+>");
+    exit(EXIT_FAILURE);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -247,11 +261,11 @@ void help(void)
  */
 void copyr(void)
 {
-  IFDEBUG("copyr()");
-  printf("%s - Version %s\n", "<+$BASENAME$+>", VERSION);
-  printf("\nCopyright (C) %d %s <%s>, GNU GPL version 2 <http://gnu.org/licenses/gpl.html>. This  is  free  software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.\n\n", <+$YEAR$+>, "<+$AUTHOR$+>", "<+$EMAIL$+>");
-  if(verb>3) printf("copyr(): Verbose: %d\n", verb); /* -vvvv */
-  exit(EXIT_FAILURE);
+    IFDEBUG("copyr()");
+    printf("%s - Version %s\n", "<+$BASENAME$+>", VERSION);
+    printf("\nCopyright (C) %d %s <%s>, GNU GPL version 2 <http://gnu.org/licenses/gpl.html>. This  is  free  software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.\n\n", <+$YEAR$+>, "<+$AUTHOR$+>", "<+$EMAIL$+>");
+    if(verb > 3) printf("copyr(): Verbose: %d\n", verb); /* -vvvv */
+    exit(EXIT_FAILURE);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -272,7 +286,7 @@ void copyr(void)
  *
  * @par Example
  * @code
- *    if(x==funcexample(i, o, z))
+ *    if(x == funcexample(i, o, z))
  *       printf("And that is it\n");
  * @endcode
  *
@@ -282,7 +296,7 @@ void copyr(void)
  * @todo Need to implement it. Its empty now. This doxygen tags are overwhelming.
  * Mandatory tags are: ingroup, brief, details, param, return, author and date.
  * The others are optional.
- * 
+ *
  * @deprecated This function will be deactivated in version +11
  * @see help()
  * @see copyr()
@@ -297,9 +311,9 @@ void copyr(void)
  */
 void <+$BASENAME$+>_init(void)
 {
-  IFDEBUG("<+$BASENAME$+>_init()");
-  /* initialization */
-  return;
+    IFDEBUG("<+$BASENAME$+>_init()");
+    /* initialization */
+    return;
 }
 
 /* ---------------------------------------------------------------------- */
