@@ -91,7 +91,7 @@ let s:AskTagDefault["DDEBUG"] = "1"
 let s:AskTagDefault["CFLAGS"] = "-Wall -Wextra -g -O0 -c -std=gnu99"
 let s:AskTagDefault["LDLIBS"] = "-lm -lncurses -lpthread -lgmp"
 let g:file_template_default={}
-let g:file_template_default["default"]="vimodel1"
+let g:file_template_default["default"]="default"
  
 command! -complete=customlist,ListAvailableTemplates -nargs=? 
 			\ LoadTemplate call LoadFileTemplate("<args>")
