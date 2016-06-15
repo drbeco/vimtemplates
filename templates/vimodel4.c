@@ -94,7 +94,9 @@
 /* ---------------------------------------------------------------------- */
 /* definitions */
 
-#define VERSION (<+$VERSION$+>) /**< Version Number */
+#ifndef VERSION /* gcc -DVERSION="0.1.160612.142628" */
+#define VERSION "<+$VERSION$+>" /**< Version Number (string) */
+#endif
 
 /* Debug */
 #ifndef DEBUG /* gcc -DDEBUG=1 */
@@ -184,7 +186,7 @@ PL_extension shared_pred[] =
 install_t install_lib<+#PREFIX#+>(void)
 {
     printf("Welcome to PROLOG calls C library template by Ruben Carlo Benante <rcb@%s>\n", "beco.cc");
-    printf("%s - Version %13.6f, by <+$AUTHOR$+> <<+$EMAIL$+>>\n", "<+$BASENAME$+>", VERSION);
+    printf("%s - Version %s, by <+$AUTHOR$+> <<+$EMAIL$+>>\n", "<+$BASENAME$+>", VERSION);
     printf("Installing lib<+#PREFIX#+>.\nUse <+#PREFIX#+>_help for help.\n");
     PL_register_extensions(shared_pred); /* registra as funcoes compartilhadas */
     /* PL_register_foreign("nome", aridade, func, FLAGS); */ /* outra opcao para registrar uma a uma */
@@ -682,7 +684,7 @@ static foreign_t <+#PREFIX#+>_copyright(void)
 static void copyr(void)
 {
     IFDEBUG("copyr()\n");
-    printf("%s - Version %13.6f\n", "<+$BASENAME$+>", VERSION);
+    printf("%s - Version %s\n", "<+$BASENAME$+>", VERSION);
     printf("\nCopyright (C) %d %s <%s>, GNU GPL version 2 <http://gnu.org/licenses/gpl.html>. This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.\n\n", <+$YEAR$+>, "<+$AUTHOR$+>", "<+$EMAIL$+>");
     if(verb>3) printf("copyr(): Verbose: %d\n", verb); /* -vvvv */
     return;
