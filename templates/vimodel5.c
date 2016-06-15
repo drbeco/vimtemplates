@@ -44,7 +44,7 @@
  * the Free Software Foundation version 3 of the License.
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.
@@ -106,12 +106,19 @@
 /* ---------------------------------------------------------------------- */
 /* definitions */
 
-#define VERSION (<+$VERSION$+>) /**< Version Number */
+#ifndef VERSION /* gcc -DVERSION="0.1.160612.142628" */
+#define VERSION "<+$VERSION$+>" /**< Version Number (string) */
+#endif
 
 /* Debug */
 #ifndef DEBUG /* gcc -DDEBUG=1 */
-  #define DEBUG 0 /**< Activate/deactivate debug mode */
+#define DEBUG 0 /**< Activate/deactivate debug mode */
 #endif
+
+#if DEBUG==0
+#define NDEBUG
+#endif
+/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */ 
 
 /** @brief Debug message if DEBUG on */
 #define IFDEBUG(M) if(DEBUG) fprintf(stderr, "[DEBUG file:%s line:%d]: " M "\n", __FILE__, __LINE__); else {;}
@@ -148,7 +155,6 @@ static int verb=0; /**< verbose level, global within the file */
 
 void help(void); /* print some help */
 void copyr(void); /* print version and copyright information */
-float version(void); /* returns the version float number YYMMDD.hhmmss */
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -182,7 +188,7 @@ int main(int argc, char *argv[])
   BITMAP *buff; /* image buffer pointer */
   PALETTE pal; /* color palette */
   int bw, bh; /* buffer width and buffer height */
-  
+
   /* getopt() configured options:
    *        -h     --help
    *        -V     --version
@@ -227,14 +233,14 @@ int main(int argc, char *argv[])
     if(verb)
       printf("Height out of range. Using %d instead.\n", BUFF_HEIGHT);
   }
-  
+
   /* instead of allegro_init() */
   if(install_allegro(SYSTEM_NONE, &errno, atexit)!=0)
   {
     IFDEBUG("Cannot install allegro.");
     exit(EXIT_FAILURE);
   }
-    
+
   set_color_depth(16);
   get_palette(pal);
 
@@ -304,30 +310,10 @@ void help(void)
 void copyr(void)
 {
   IFDEBUG("copyr()");
-  printf("%s - Version %13.6f\n", "<+$BASENAME$+>", version());
-  printf("\nCopyright (C) %d %s <%s>, GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>. This  is  free  software:  you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.\n\n", <+$YEAR$+>, "<+$AUTHOR$+>", "<+$EMAIL$+>");
+  printf("%s - Version %s\n", "<+$BASENAME$+>", VERSION);
+  printf("\nCopyright (C) %d %s <%s>, GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>. This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.\n\n", <+$YEAR$+>, "<+$AUTHOR$+>", "<+$EMAIL$+>");
   if(verb>3) printf("copyr(): Verbose: %d\n", verb); /* -vvvv */
   exit(EXIT_FAILURE);
-}
-
-/* ---------------------------------------------------------------------- */
-/**
- * @ingroup GroupUnique
- * @brief Returns the version number
- * @details This function may be used to update easily the version number,
- * instead of using the MACRO.
- * @return Float VERSION in the form YYMMDD.hhmmss
- * @author <+$AUTHOR$+>
- * @version <+$VERSION$+>
- * @date <+$DATE$+>
- *
- */
-float version(void)
-{
-  IFDEBUG("version()");
-  if(verb>3)
-    printf("Version %13.6f\n", VERSION); /* -vvvv */
-  return (VERSION); /* YYMMDD.hhmmss */
 }
 
 /* ---------------------------------------------------------------------- */
