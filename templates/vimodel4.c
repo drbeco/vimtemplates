@@ -101,6 +101,11 @@
 #define DEBUG 0 /**< Activate/deactivate debug mode */
 #endif
 
+#if DEBUG==0
+#define NDEBUG
+#endif
+/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */
+
 /** @brief Debug message if DEBUG on */
 #define IFDEBUG(M) if(DEBUG) fprintf(stderr, "[DEBUG file:%s line:%d]: " M "\n", __FILE__, __LINE__); else {;}
 
