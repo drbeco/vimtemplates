@@ -51,11 +51,11 @@
  * 59 Temple Place - Suite 330, Boston, MA. 02111-1307, USA.
  * Or read it online at <<http://www.gnu.org/licenses/>>.
  *
- * 
+ *
  * @todo Now that you have the template, hands on! Programme!
  * @warning Be carefull not to lose your mind in small things.
  * @bug This file right now does nothing usefull
- * 
+ *
  */
 
 /*
@@ -88,11 +88,16 @@
 #define DEBUG 0 /**< Activate/deactivate debug mode */
 #endif
 
+#if DEBUG==0
+#define NDEBUG
+#endif
+/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */ 
+
 /** @brief Debug message if DEBUG on */
 #define IFDEBUG(M) if(DEBUG) fprintf(stderr, "[DEBUG file:%s line:%d]: " M "\n", __FILE__, __LINE__); else {;}
 
 /* limits */
-#define IMAX 80 /**< index buffer */
+#define SBUFF 256 /**< string buffer */
 
 /* ---------------------------------------------------------------------- */
 /* prototypes */
@@ -128,15 +133,20 @@ void copyr(void); /* print version and copyright information */
  */
 int main(void)
 {
-  /* local declarations */
+    /* local declarations */
+    int i; /* general index */
+    char s[SBUFF]; /* a string to hold ... */
 
-  /* code */
-  help();
-  copyr();
-  
-  /* ...and we are done */
-  return EXIT_SUCCESS;
+
+    /* code */
+    help();
+    copyr();
+
+    /* ...and we are done */
+    return EXIT_SUCCESS;
 }
+
+/* add more functions here */
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -151,15 +161,15 @@ int main(void)
  */
 void help(void)
 {
-  IFDEBUG("help()");
-  printf("%s - %s\n", "<+$BASENAME$+>", "<+#BRIEF#+>");
-  printf("\nUsage: %s\n\n", "<+$BASENAME$+>");
-  printf("This program does...\n");
-  /* add more stuff here */
-  printf("\nExit status:\n\t0 if ok.\n\t1 some error occurred.\n");
-  printf("\nTodo:\n\tLong options not implemented yet.\n");
-  printf("\nAuthor:\n\tWritten by %s <%s>\n\n", "<+$AUTHOR$+>", "<+$EMAIL$+>");
-  return;
+    IFDEBUG("help()");
+    printf("%s - %s\n", "<+$BASENAME$+>", "<+#BRIEF#+>");
+    printf("\nUsage: %s\n\n", "<+$BASENAME$+>");
+    printf("This program does...\n");
+    /* add more stuff here */
+    printf("\nExit status:\n\t0 if ok.\n\t1 some error occurred.\n");
+    printf("\nTodo:\n\tLong options not implemented yet.\n");
+    printf("\nAuthor:\n\tWritten by %s <%s>\n\n", "<+$AUTHOR$+>", "<+$EMAIL$+>");
+    return;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -175,10 +185,10 @@ void help(void)
  */
 void copyr(void)
 {
-  IFDEBUG("copyr()");
-  printf("%s - Version %s\n", "<+$BASENAME$+>", VERSION);
-  printf("\nCopyright (C) %d %s <%s>, GNU GPL version 2 <http://gnu.org/licenses/gpl.html>. This  is  free  software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.\n\n", <+$YEAR$+>, "<+$AUTHOR$+>", "<+$EMAIL$+>");
-  return;
+    IFDEBUG("copyr()");
+    printf("%s - Version %s\n", "<+$BASENAME$+>", VERSION);
+    printf("\nCopyright (C) %d %s <%s>, GNU GPL version 2 <http://gnu.org/licenses/gpl.html>. This  is  free  software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.\n\n", <+$YEAR$+>, "<+$AUTHOR$+>", "<+$EMAIL$+>");
+    return;
 }
 
 /* ---------------------------------------------------------------------- */
