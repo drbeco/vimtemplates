@@ -118,7 +118,7 @@
 #if DEBUG==0
 #define NDEBUG
 #endif
-/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */ 
+/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */
 
 /** @brief Debug message if DEBUG on */
 #define IFDEBUG(M) if(DEBUG) fprintf(stderr, "[DEBUG file:%s line:%d]: " M "\n", __FILE__, __LINE__); else {;}
@@ -148,7 +148,7 @@
 /* ---------------------------------------------------------------------- */
 /* globals */
 
-static int verb=0; /**< verbose level, global within the file */
+static int verb = 0; /**< verbose level, global within the file */
 
 /* ---------------------------------------------------------------------- */
 /* prototypes */
@@ -184,85 +184,85 @@ void copyr(void); /* print version and copyright information */
  */
 int main(int argc, char *argv[])
 {
-  int opt; /* return from getopt() */
-  BITMAP *buff; /* image buffer pointer */
-  PALETTE pal; /* color palette */
-  int bw, bh; /* buffer width and buffer height */
+    int opt; /* return from getopt() */
+    BITMAP *buff; /* image buffer pointer */
+    PALETTE pal; /* color palette */
+    int bw, bh; /* buffer width and buffer height */
 
-  /* getopt() configured options:
-   *        -h     --help
-   *        -V     --version
-   *        -v     --verbose
-   *        -r W:H --resolution
-   */
-  opterr = 0;
-  while((opt = getopt(argc, argv, "vhVr:")) != EOF)
-    switch(opt)
+    /* getopt() configured options:
+     *        -h     --help
+     *        -V     --version
+     *        -v     --verbose
+     *        -r W:H --resolution
+     */
+    opterr = 0;
+    while((opt = getopt(argc, argv, "vhVr:")) != EOF)
+        switch(opt)
+        {
+            case 'h':
+                help();
+                break;
+            case 'V':
+                copyr();
+                break;
+            case 'v':
+                verb++;
+                break;
+            case 'r':
+                sscanf(optarg, "%d:%d", &bw, &bh);
+                break;
+            case '?':
+            default:
+                printf("Type\n\t$man %s\nor\n\t$%s -h\nfor help.\n\n", argv[0], argv[0]);
+                return EXIT_FAILURE;
+        }
+
+    if(verb)
+        printf("Verbose level set at: %d\n", verb);
+    /* ...and we are done */
+
+    if(bw < BUFF_WIDTH_MIN || bw > BUFF_WIDTH_MAX)
     {
-      case 'h':
-        help();
-        break;
-      case 'V':
-        copyr();
-        break;
-      case 'v':
-        verb++;
-        break;
-      case 'r':
-        sscanf(optarg, "%d:%d", &bw, &bh);
-        break;
-      case '?':
-      default:
-        printf("Type\n\t$man %s\nor\n\t$%s -h\nfor help.\n\n", argv[0], argv[0]);
-        return EXIT_FAILURE;
+        bw = BUFF_WIDTH;
+        if(verb)
+            printf("Width out of range. Using %d instead.\n", BUFF_WIDTH);
+    }
+    if(bh < BUFF_HEIGHT_MIN || bh > BUFF_HEIGHT_MAX)
+    {
+        bh = BUFF_HEIGHT;
+        if(verb)
+            printf("Height out of range. Using %d instead.\n", BUFF_HEIGHT);
     }
 
-  if(verb)
-    printf("Verbose level set at: %d\n", verb);
-  /* ...and we are done */
+    /* instead of allegro_init() */
+    if(install_allegro(SYSTEM_NONE, &errno, atexit) != 0)
+    {
+        IFDEBUG("Cannot install allegro.");
+        exit(EXIT_FAILURE);
+    }
 
-  if(bw<BUFF_WIDTH_MIN|| bw>BUFF_WIDTH_MAX)
-  {
-    bw=BUFF_WIDTH;
+    set_color_depth(16);
+    get_palette(pal);
+
+    /* Create a buffer for saving the image, size Width x Height pixels. */
+    buff = create_bitmap(bw, bh);
+    if(buff == NULL)
+    {
+        IFDEBUG("Could not create buffer!");
+        exit(EXIT_FAILURE);
+    }
+
+    circle(buff, 160, 120, 100, CORAMARELO);
+    textprintf_ex(buff, font, 50, 50, CORVERDE, CORPRETO, "Teste do circulo.");
+
+    save_bitmap(IMAGENAME, buff, pal);
+    destroy_bitmap(buff);
+    allegro_exit();
+
     if(verb)
-      printf("Width out of range. Using %d instead.\n", BUFF_WIDTH);
-  }
-  if(bh<BUFF_HEIGHT_MIN || bh>BUFF_HEIGHT_MAX)
-  {
-    bh=BUFF_HEIGHT;
-    if(verb)
-      printf("Height out of range. Using %d instead.\n", BUFF_HEIGHT);
-  }
+        printf("Successfully saved image %s.\n", IMAGENAME);
 
-  /* instead of allegro_init() */
-  if(install_allegro(SYSTEM_NONE, &errno, atexit)!=0)
-  {
-    IFDEBUG("Cannot install allegro.");
-    exit(EXIT_FAILURE);
-  }
-
-  set_color_depth(16);
-  get_palette(pal);
-
-  /* Create a buffer for saving the image, size Width x Height pixels. */
-  buff = create_bitmap(bw, bh);
-  if(buff == NULL)
-  {
-    IFDEBUG("Could not create buffer!");
-    exit(EXIT_FAILURE);
-  }
-
-  circle(buff, 160, 120, 100, CORAMARELO);
-  textprintf_ex(buff, font, 50, 50, CORVERDE, CORPRETO, "Teste do circulo.");
-
-  save_bitmap(IMAGENAME, buff, pal);
-  destroy_bitmap(buff);
-  allegro_exit();
-
-  if(verb)
-    printf("Successfully saved image %s.\n", IMAGENAME);
-
-  return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 
 /** @brief Allegro magic */
@@ -281,19 +281,19 @@ END_OF_MAIN()
  */
 void help(void)
 {
-  IFDEBUG("help()");
-  printf("%s - %s\n", "<+$BASENAME$+>", "<+#BRIEF#+>");
-  printf("\nUsage: %s [-h|-v]\n", "<+$BASENAME$+>");
-  printf("\nOptions:\n");
-  printf("\t-h,      --help\n\t\tShow this help.\n");
-  printf("\t-V,      --version\n\t\tShow version and copyright information.\n");
-  printf("\t-v,      --verbose\n\t\tSet verbose level (cumulative).\n");
-  printf("\t-r W:H,  --resolution\n\t\tSet resolution width to be W (range: [%d, %d]) and height H (range: [%d, %d])\n", BUFF_WIDTH_MIN, BUFF_WIDTH_MAX, BUFF_HEIGHT_MIN, BUFF_HEIGHT_MAX);
-  /* add more options here */
-  printf("\nExit status:\n\t0 if ok.\n\t1 some error occurred.\n");
-  printf("\nTodo:\n\tLong options not implemented yet.\n");
-  printf("\nAuthor:\n\tWritten by %s <%s>\n\n", "<+$AUTHOR$+>", "<+$EMAIL$+>");
-  exit(EXIT_FAILURE);
+    IFDEBUG("help()");
+    printf("%s - %s\n", "<+$BASENAME$+>", "<+#BRIEF#+>");
+    printf("\nUsage: %s [-h|-v]\n", "<+$BASENAME$+>");
+    printf("\nOptions:\n");
+    printf("\t-h,      --help\n\t\tShow this help.\n");
+    printf("\t-V,      --version\n\t\tShow version and copyright information.\n");
+    printf("\t-v,      --verbose\n\t\tSet verbose level (cumulative).\n");
+    printf("\t-r W:H,  --resolution\n\t\tSet resolution width to be W (range: [%d, %d]) and height H (range: [%d, %d])\n", BUFF_WIDTH_MIN, BUFF_WIDTH_MAX, BUFF_HEIGHT_MIN, BUFF_HEIGHT_MAX);
+    /* add more options here */
+    printf("\nExit status:\n\t0 if ok.\n\t1 some error occurred.\n");
+    printf("\nTodo:\n\tLong options not implemented yet.\n");
+    printf("\nAuthor:\n\tWritten by %s <%s>\n\n", "<+$AUTHOR$+>", "<+$EMAIL$+>");
+    exit(EXIT_FAILURE);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -309,13 +309,13 @@ void help(void)
  */
 void copyr(void)
 {
-  IFDEBUG("copyr()");
-  printf("%s - Version %s\n", "<+$BASENAME$+>", VERSION);
-  printf("\nCopyright (C) %d %s <%s>, GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>. This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.\n\n", <+$YEAR$+>, "<+$AUTHOR$+>", "<+$EMAIL$+>");
-  if(verb>3) printf("copyr(): Verbose: %d\n", verb); /* -vvvv */
-  exit(EXIT_FAILURE);
+    IFDEBUG("copyr()");
+    printf("%s - Version %s\n", "<+$BASENAME$+>", VERSION);
+    printf("\nCopyright (C) %d %s <%s>, GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>. This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.\n\n", <+$YEAR$+>, "<+$AUTHOR$+>", "<+$EMAIL$+>");
+    if(verb > 3) printf("copyr(): Verbose: %d\n", verb); /* -vvvv */
+    exit(EXIT_FAILURE);
 }
 
 /* ---------------------------------------------------------------------- */
-/* vi: set ai et ts=2 sw=2 tw=0 wm=0 fo=croql : C config for Vim modeline */
-/* Template by Dr. Beco <rcb at beco dot cc> Version 20150619.231433      */
+/* vi: set ai et ts=4 sw=4 tw=0 wm=0 fo=croql : C config for Vim modeline */
+/* Template by Dr. Beco <rcb at beco dot cc> Version 20160615.012749      */
