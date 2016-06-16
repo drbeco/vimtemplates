@@ -79,7 +79,6 @@
 /* #include <time.h> */ /* Time and date functions */
 /* #include <math.h> */ /* Mathematics functions */
 /* #include <string.h> */ /* Strings functions definitions */
-/* #include <assert.h> */ /* Verify assumptions with assert */
 /* #include <dlfcn.h> */ /* Dynamic library */
 /* #include <malloc.h> */ /* Dynamic memory allocation */
 /* #include <unistd.h> */ /* UNIX standard function */
