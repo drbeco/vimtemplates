@@ -24,11 +24,16 @@
 #*   Email: rcb@beco.cc                                                    *
 #*   Webpage: http://drbeco.github.io/                                     *
 #***************************************************************************
+#
+# $make    : run make to the target program $(o)
+# -B       : force rebuild
+# DEBUG=1  : turn on DEBUG
 
 .PHONY: clean cleanall
 .PRECIOUS: %.o
 SHELL=/bin/bash -o pipefail
 
+DEBUG ?= 0
 MAJOR = <+#MAJOR#+>
 MINOR = <+#MINOR#+>
 BUILD = $(shell date +"%g%m%d.%H%M%S")
@@ -52,7 +57,7 @@ CFLAGS = <+#CFLAGS#+>
 #	-m486 -m64 -m32 -march=i586 -mtune=i586 -mtune=generic
 #	-mw32 -mwindows -mconsole -mthread -mdll
 # 	`allegro-config --cflags`
-CPPFLAGS = -DVERSION=$(VERSION) -DBUILD="\"$(BUILD)\"" -DDEBUG=<+#DDEBUG#+>
+CPPFLAGS = -DVERSION=$(VERSION) -DBUILD="\"$(BUILD)\"" -DDEBUG=$(DEBUG)
 #more CPPFLAGS:
 #	-DQT_THREAD_SUPPORT -D_REENTRANT -D_BSD_SOURCE 
 # 	-D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE=700
@@ -62,7 +67,7 @@ LDLIBS = -Wl,--defsym,BUILD_$(DEFSYM)=0 <+#LDLIBS#+>
 #	`allegro-config --libs` -lalleg -lstdc++
 #	-static -shared -ll -lfl -ldl -ly
 #	-shared-libgcc -static-libgcc
-o = <+#PROGRAM#+>
+o ?= <+#PROGRAM#+>
 
 #object
 %.o : %.c
