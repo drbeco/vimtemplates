@@ -17,8 +17,7 @@
  ***************************************************************************
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 3 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; either version 2 of the License.        *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -48,11 +47,11 @@
  * @author <+$AUTHOR$+> <<<+$EMAIL$+>>>
  * @par Webpage
  * <<a href="http://<+$WEBPAGE$+>"><+$WEBPAGE$+></a>>
- * @copyright (c) <+$YEAR$+> GNU GPL v3
+ * @copyright (c) <+$YEAR$+> GNU GPL v2
  * @note This program is free software: you can redistribute it
  * and/or modify it under the terms of the
  * GNU General Public License as published by
- * the Free Software Foundation version 3 of the License.
+ * the Free Software Foundation version 2 of the License.
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -129,7 +128,7 @@ help :-
  */
 copyright :-
   writeln('<+$BASENAME$+> - Version <+$VERSION$+>'),
-  writeln('Copyright (C) <+$YEAR$+> <+$AUTHOR$+> <<+$EMAIL$+>>, GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>. This  is  free  software:  you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.').
+  writeln('Copyright (C) <+$YEAR$+> <+$AUTHOR$+> <<+$EMAIL$+>>, GNU GPL version 2 <http://gnu.org/licenses/gpl.html>. This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.').
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -160,10 +159,10 @@ verbose0 :-
  * @ingroup GroupUnique
  * @brief version is a fact
  * @details It will return the version number of program <+$BASENAME$+>.
- * @param[out] A It's a float number with the version number.
+ * @param[out] A It's a string with the version number.
  * @return TRUE always.
  */
-version(<+$VERSION$+>).
+version('<+$VERSION$+>').
 
 /* ---------------------------------------------------------------------- */
 /**
