@@ -34,8 +34,8 @@
 SHELL=/bin/bash -o pipefail
 
 DEBUG ?= 0
-MAJOR = <+#MAJOR#+>
-MINOR = <+#MINOR#+>
+MAJOR ?= <+#MAJOR#+>
+MINOR ?= <+#MINOR#+>
 BUILD = $(shell date +"%g%m%d.%H%M%S")
 DEFSYM = $(subst .,_,$(BUILD))
 VERSION = "\"$(MAJOR).$(MINOR).$(BUILD)\""
@@ -69,14 +69,27 @@ LDLIBS = -Wl,--defsym,BUILD_$(DEFSYM)=0 <+#LDLIBS#+>
 #	-shared-libgcc -static-libgcc
 o ?= <+#PROGRAM#+>
 
+#binary not given
+$(o) : % : %.o $(OBJ)
+	$(CC) $(LDLIBS) $^ -o $@ |& tee errors.err
+	echo $(o) version $(VERSION) > VERSION
+
+#binary no extension
+% : %.o $(OBJ)
+    $(CC) $(LDLIBS) $^ -o $@ |& tee errors.err
+    echo % version $(VERSION) > VERSION
+
+#binary.x
+%.x : %.o $(OBJ)
+    $(CC) $(LDLIBS) $^ -o $@ |& tee errors.err
+    echo %.x version $(VERSION) > VERSION
+
 #object
 %.o : %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -o $@ |& tee errors.err
 
-#binary
-$(o) : % : %.o $(OBJ)
-	$(CC) $(LDLIBS) $^ -o $@ |& tee errors.err
-	echo $(o) version $(VERSION) > VERSION
+nomatch:
+	echo 'makefile error' $(warning nomatch)
 
 clean:
 	rm -f *.o errors.err
