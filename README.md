@@ -13,7 +13,7 @@ The VI Improved templates
     - `let g:webpage='www.myextraordinary.example.com'`
     - `let g:phone="+55 (11) 1234-5678"`
 
-* If you have doxgen plugin installed, you can use:
+* If you have doxygen plugin installed, you can use:
     - `let g:DoxygenToolkit_authorName=g:author`
 
 That is basically it.
