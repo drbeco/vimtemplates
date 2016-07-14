@@ -89,7 +89,7 @@
  * @retval FALSE If main can't be proven.
  */
 main :-
-  writeln('Initializing...').
+    writeln('Initializing...').
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -99,25 +99,25 @@ main :-
  * @return TRUE always.
  */
 help :-
-  writeln('<+$BASENAME$+> - <+#BRIEF#+>'),
-  writeln('Usage:'),
-  writeln('$swipl -s <+$BASENAME$+>'),
-  /* Stand alone scripts, invert: comment above, uncomment bellow. */
-  /* writeln('$./<+$BASENAME$+>'), */
-  writeln('Clauses:'),
-  writeln('  main.       Starts the main program.'),
-  writeln('  copyright.  Shows version and copyright information.'),
-  writeln('  version.    Returns version number.'),
-  writeln('  help.       Shows this help message.'),
-  writeln('  verbose.    Sets verbose level (cumulative).'),
-  /* add more options here */
-  writeln('  Exit status:'),
-  writeln('    TRUE if ok'),
-  writeln('    FALSE if some error occurred.'),
-  writeln('  Todo:'),
-  writeln('    Read options from OS'),
-  writeln('  Author:'),
-  writeln('    Written by <+$AUTHOR$+> <<+$EMAIL$+>>').
+    writeln('<+$BASENAME$+> - <+#BRIEF#+>'),
+    writeln('Usage:'),
+    writeln('$swipl -s <+$BASENAME$+>'),
+    /* Stand alone scripts, invert: comment above, uncomment bellow. */
+    /* writeln('$./<+$BASENAME$+>'), */
+    writeln('Clauses:'),
+    writeln('  main.       Starts the main program.'),
+    writeln('  copyright.  Shows version and copyright information.'),
+    writeln('  version.    Returns version number.'),
+    writeln('  help.       Shows this help message.'),
+    writeln('  verbose.    Sets verbose level (cumulative).'),
+    /* add more options here */
+    writeln('  Exit status:'),
+    writeln('    TRUE if ok'),
+    writeln('    FALSE if some error occurred.'),
+    writeln('  Todo:'),
+    writeln('    Read options from OS'),
+    writeln('  Author:'),
+    writeln('    Written by <+$AUTHOR$+> <<+$EMAIL$+>>').
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -127,8 +127,8 @@ help :-
  * @return TRUE always.
  */
 copyright :-
-  writeln('<+$BASENAME$+> - Version <+$VERSION$+>'),
-  writeln('Copyright (C) <+$YEAR$+> <+$AUTHOR$+> <<+$EMAIL$+>>, GNU GPL version 2 <http://gnu.org/licenses/gpl.html>. This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.').
+    writeln('<+$BASENAME$+> - Version <+$VERSION$+>'),
+    writeln('Copyright (C) <+$YEAR$+> <+$AUTHOR$+> <<+$EMAIL$+>>, GNU GPL version 2 <http://gnu.org/licenses/gpl.html>. This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.').
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -138,10 +138,10 @@ copyright :-
  * @return TRUE always.
  */
 verbose :-
-  verbosecounter(X),
-  retractall(verbosecounter(_)),
-  Y is X + 1,
-  assert(verbosecounter(Y)).
+    verbosecounter(X),
+    retractall(verbosecounter(_)),
+    Y is X + 1,
+    assert(verbosecounter(Y)).
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -151,8 +151,8 @@ verbose :-
  * @return TRUE always.
  */
 verbose0 :-
-  retractall(verbosecounter(_)),
-  assert(verbosecounter(0)).
+    retractall(verbosecounter(_)),
+    assert(verbosecounter(0)).
 
 /* ---------------------------------------------------------------------- */
 /**
