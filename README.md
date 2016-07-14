@@ -23,7 +23,9 @@ That is basically it.
 The *vimodels* I present covers a range of files but it is still just the beginnig. There are plenty of file extensions out there in need of a template.
 
 This script is based on the original file-templates.vim
-by Alan Budden, 2009, that can (probably) still be found [here](http://lucumr.pocoo.org/cogitations/2007/08/03/vim-file-templates/) [and here](https://sites.google.com/site/abudden/contents/Vim-Scripts/file-templates)
+by Alan Budden, 2009, that can still be found [here at vim.org](http://www.vim.org/scripts/script.php?script_id=2647) and [here at sites.google](https://sites.google.com/site/abudden/contents/Vim-Scripts/file-templates)
+
+A nice place to bring and adapt more templates to _vimtemplates_ script is here at [rosettacode](rosettacode.org).
 
 Feel free to help!
 
