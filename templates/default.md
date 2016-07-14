@@ -186,12 +186,12 @@ _________________________________________________________________
 
 ####Copyright, License and Warranty
 
-__copyright (c) <+$YEAR$+> GNU GPL v3__
+__copyright (c) <+$YEAR$+> GNU GPL v2__
 
 This program is free software: you can redistribute it
 and/or modify it under the terms of the
 GNU General Public License as published by
-the Free Software Foundation version 3 of the License.
+the Free Software Foundation version 2 of the License.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -204,4 +204,5 @@ Or read it online at <<http://www.gnu.org/licenses/>>.
 
 _________________________________________________________________
 
-_Template by Dr. Beco < rcb at beco dot cc > Version 20150619.231433_
+_Template by Dr. Beco < rcb at beco dot cc > Version 20160714.115030_
+
