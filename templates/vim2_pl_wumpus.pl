@@ -68,6 +68,57 @@
  *
  */
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hunt The Wumpus - World Simulator
+%
+%   Author: 
+%     - Ruben Carlo Benante (rcb@beco.cc)
+%   Copyright: 2012 - 2016
+%   License: GNU GPL Version 2.0
+%
+%   Special thanks to:
+%     - Original by Gregory Yob (1972)
+%     - Larry Holder (accessed version Oct/2005)
+%     - Walter Nauber 09/02/2001
+%     - An Anonymous version of Hunt The Wumpus with menus (aeric? 2012?)
+%
+% A Prolog implementation of the Wumpus world invented by Gregory Yob
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% To define an agent you will need:
+%   use modulo wumpus.pl
+%   init_agent
+%   run_agent
+%   world_setup([Size, Type, Move, Gold, Pit, Bat, [RandS, RandA]])
+%
+%       +--------+-----------+
+%       |  Type  |    Size   |
+%       +--------+-----------+
+%       | fig62  | 4 (fixed) |
+%       | grid   | 2 ... 9   |
+%       | dodeca | 20 (fixed)|
+%       +--------+-----------+
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Lista de Percepcao: [Stench, Breeze, Glitter, Bump, Scream, Rustle]
+% Traducao: [Fedor, Vento, Brilho, Trombada, Grito, Ruido]
+% Acoes possiveis (abreviacoes para jogo no modo manual apenas):
+% goforward (go)                - andar
+% turnright (turn, turnr ou tr) - girar sentido horario
+% turnleft (turnl ou tl)        - girar sentido anti-horario
+% grab (gr)                     - pegar o ouro
+% climb (cl)                    - sair da caverna
+% shoot (sh)                    - atirar a flecha
+% sit (si)                      - sentar (nao faz nada, passa a vez)
+%
+% Custos:
+% Andar/Girar/Pegar/Sair/Atirar/Sentar: -1
+% Morrer: -1000 (buraco, wumpus ou fadiga)
+% Matar Wumpus: +1000
+% Sair com ouro: +500 para cada pepita
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 /* ---------------------------------------------------------------------- */
 /* Files, dynamic clauses, modules, etc. */
 /**
@@ -77,7 +128,57 @@
  * @retval TRUE on success.
  * @retval FALSE on fail.
  */
-:- load_files([wumpus1]).
+:- use_module(wumpus, [start/0]). % agente usa modulo simulador
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% world_setup([Size, Type, Move, Gold, Pit, Bat, Adv])
+%
+% Size and Type: - fig62, 4
+%                - grid, [2-9] (default 4)
+%                - dodeca, 20
+%
+% Configuration:
+%    1.   Size: 0,2..9,20, where: grid is [2-9] or 0 for random, dodeca is 20, fig62 is 4.
+%    2.   Type: fig62, grid or dodeca
+%    3.   Move: stander, walker, runner (wumpus movement)
+%    4.   Gold: Integer is deterministic number, float from 0.0<G<1.0 is probabilistic
+%    5.   Pits: Idem, 0 is no pits.
+%    6.   Bats: Idem, 0 is no bats.
+%    7.   Adv: a list with advanced configuration in the form [RandS, RandA]:
+%       - RandS - yes or no, random agent start position
+%       - RandA - yes or no, random agent start angle of orientation
+%
+% examples: 
+% world_setup([4, grid, stander, 0.1, 0.2, 0.1, [no, no]]). % default
+% world_setup([5, grid, stander, 1, 3, 0.1, [yes]]). % size 5, 1 gold, 3 pits, some bats prob. 0.1, agent randomly positioned
+%
+%   Types of Wumpus Movement
+%       walker    : original: moves when it hears a shoot, or you enter its cave
+%       runner    : go forward and turn left or right on bumps, maybe on pits
+%       wanderer  : arbitrarily choses an action from [sit,turnleft,turnright,goforward]
+%       spinner   : goforward, turnleft, repeat.
+%       hoarder   : go to one of the golds and sit
+%       spelunker : go to a pit and sit
+%       stander   : do not move (default)
+%       trapper   : goes hunting agent as soon as it leaves [1,1]; goes home otherwise
+%       bulldozer : hunt the agent as soon as it smells him
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Mundo: 
+%    4x4, quadrado, wumpus anda quando atira ou quando entra na casa dele
+%    probabilidade de ouro 0.1, de buracos 0.2, um unico morcego
+%    agente inicia em casa aleatoria
+%    Maximo de acoes antes de morrer de fome: Size^2x4 = 4x4x4 = 64
+
+/**
+ * @ingroup GroupUnique
+ * @brief World setup 
+ * @param[in] A List of configurations
+ * @retval Always TRUE (it is a fact).
+*/
+world_setup([4, grid, walker, 0.1, 0.2, 1, [yes]]).
+
 /**
  * @ingroup GroupUnique
  * @brief Defining dynamic clauses
@@ -85,7 +186,9 @@
  * @retval TRUE on success.
  * @retval FALSE on fail.
 */
-:- dynamic([verbosecounter/1, estou/2, direcao/1, flecha/1, ouro/1, andei/1, andarei/1, seguras/1]).
+:- dynamic([
+    verbosecounter/1,   % contador verbose 
+    flecha/1]).         % contador de flechas
 
 /* ---------------------------------------------------------------------- */
 /* Facts and Rules */
@@ -97,8 +200,8 @@
  * @retval FALSE If main can't be proven.
  */
 main :-
-  writeln('Initializing...'),
-  start. /*  from Wumpus module. */
+    writeln('Initializing...'),
+    start. /*  from Wumpus module. */
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -108,25 +211,25 @@ main :-
  * @return TRUE always.
  */
 help :-
-  writeln('<+$BASENAME$+> - <+#BRIEF#+>'),
-  writeln('Usage:'),
-  writeln('$swipl -s <+$BASENAME$+>'),
-  /* Stand alone scripts, invert: comment above, uncomment bellow. */
-  /* writeln('$./<+$BASENAME$+>'), */
-  writeln('Clauses:'),
-  writeln('  main.       Starts the main program.'),
-  writeln('  copyright.  Shows version and copyright information.'),
-  writeln('  version.    Returns version number.'),
-  writeln('  help.       Shows this help message.'),
-  writeln('  verbose.    Sets verbose level (cumulative).'),
-  /* add more options here */
-  writeln('  Exit status:'),
-  writeln('    TRUE if ok'),
-  writeln('    FALSE if some error occurred.'),
-  writeln('  Todo:'),
-  writeln('    Read options from OS'),
-  writeln('  Author:'),
-  writeln('    Written by <+$AUTHOR$+> <<+$EMAIL$+>>').
+    writeln('<+$BASENAME$+> - <+#BRIEF#+>'),
+    writeln('Usage:'),
+    writeln('$swipl -s <+$BASENAME$+>'),
+    /* Stand alone scripts, invert: comment above, uncomment bellow. */
+    /* writeln('$./<+$BASENAME$+>'), */
+    writeln('Clauses:'),
+    writeln('  main.       Starts the main program.'),
+    writeln('  copyright.  Shows version and copyright information.'),
+    writeln('  version.    Returns version number.'),
+    writeln('  help.       Shows this help message.'),
+    writeln('  verbose.    Sets verbose level (cumulative).'),
+    /* add more options here */
+    writeln('  Exit status:'),
+    writeln('    TRUE if ok'),
+    writeln('    FALSE if some error occurred.'),
+    writeln('  Todo:'),
+    writeln('    Read options from OS'),
+    writeln('  Author:'),
+    writeln('    Written by <+$AUTHOR$+> <<+$EMAIL$+>>').
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -136,8 +239,8 @@ help :-
  * @return TRUE always.
  */
 copyright :-
-  writeln('<+$BASENAME$+> - Version <+$VERSION$+>'),
-  writeln('Copyright (C) <+$YEAR$+> <+$AUTHOR$+> <<+$EMAIL$+>>, GNU GPL version 2 <http://gnu.org/licenses/gpl.html>. This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.').
+    writeln('<+$BASENAME$+> - Version <+$VERSION$+>'),
+    writeln('Copyright (C) <+$YEAR$+> <+$AUTHOR$+> <<+$EMAIL$+>>, GNU GPL version 2 <http://gnu.org/licenses/gpl.html>. This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author takes no responsability to any damage this software may inflige in your data.').
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -147,10 +250,10 @@ copyright :-
  * @return TRUE always.
  */
 verbose :-
-  verbosecounter(X),
-  retractall(verbosecounter(_)),
-  Y is X + 1,
-  assert(verbosecounter(Y)).
+    verbosecounter(X),
+    retractall(verbosecounter(_)),
+    Y is X + 1,
+    assert(verbosecounter(Y)).
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -160,8 +263,8 @@ verbose :-
  * @return TRUE always.
  */
 verbose0 :-
-  retractall(verbosecounter(_)),
-  assert(verbosecounter(0)).
+    retractall(verbosecounter(_)),
+    assert(verbosecounter(0)).
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -205,18 +308,7 @@ version('<+$VERSION$+>').
  * @return TRUE always.
  */
 init_agent :-
-  verbose0.
-
-/* ---------------------------------------------------------------------- */
-/**
- * @ingroup GroupUnique
- * @brief restart_agent is det
- * @details Used in case of many simulations in a trial. This restarts the agent.
- *          Usually it calls init_agent, but can be used also to free memory.
- * @return TRUE always.
- */
-restart_agent :-
- init_agent.
+    verbose0.
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -234,7 +326,7 @@ restart_agent :-
  * @return TRUE always.
  */
 run_agent(Percepcao, Acao) :-
- cabeca_dura(Percepcao, Acao).
+    cabeca_dura(Percepcao, Acao).
 
 /* ---------------------------------------------------------------------- */
 /**
@@ -256,14 +348,19 @@ cabeca_dura(_,goforward).
 /*
  * Abaixo mais exemplos de uso:
  *
- * Percepcoes: P eh lista = [Stench,Breeze,Glitter,Bump,Scream]
- * atualizamodelo(P) :-
- *    atualizacheiro(P),
- *    atualizabrisa(P),
- *    atualizabrilho(P),
- *    atualizabatida(P),
- *    atualizagrito(P).
+ *------------------------------------------------------------------------------
+ * Ideia para atualizar modelo de mundo 
  *
+ * Percepcoes: P eh lista = [Stench,Breeze,Glitter,Bump,Scream,Rustle]
+ * atualizamodelo(P) :-
+ *     atualizacheiro(P),
+ *     atualizabrisa(P),
+ *     atualizabrilho(P),
+ *     atualizabatida(P),
+ *     atualizagrito(P),
+ *     atualizaruido(P).
+ *
+ *------------------------------------------------------------------------------
  * Agente fixo na Figura 62 do livro de Russel e Norvig
  *
  *  * @ingroup GroupUnique
@@ -273,14 +370,7 @@ cabeca_dura(_,goforward).
  *  *          This example uses assert/retract to keep track of things.
  *  * @return TRUE always.
  * init_agent :-
- *  inicia_fig62.
- *
- *  * @ingroup GroupUnique
- *  * @brief restart_agent is det
- *  * @details Simply call inicia_fig62
- *  * @return TRUE always.
- * restart_agent :-
- *  inicia_fig62.
+ *     inicia_fig62.
  *
  *  * @ingroup GroupUnique
  *  * @brief inicia_fig62 is det
@@ -290,8 +380,8 @@ cabeca_dura(_,goforward).
  *  *          solve, in an ad-hoc way, the Russel & Norvig famous figure 62.
  *  * @return TRUE always.
  * inicia_fig62 :-
- *   retractall(fig62acts(_)),
- *   assert(fig62acts([goforward,turnleft,goforward,goforward,grab,
+ *     retractall(fig62acts(_)),
+ *     assert(fig62acts([goforward,turnleft,goforward,goforward,grab,
  *                     turnleft,turnleft,goforward,goforward,turnright,
  *                     goforward,climb])).
  *
@@ -301,9 +391,8 @@ cabeca_dura(_,goforward).
  *  *          Also prints action taken and the current world.
  *  * @return TRUE always.
  * run_agent(Percept,Action) :-
- *   fig62_agent(Percept,Action),
- *   format('~nacao do agente: (~w)~n',Action),
- *   display_world.
+ *     fig62_agent(Percept,Action),
+ *     format('~nacao do agente: (~w)~n',Action).
  *
  *  * @ingroup GroupUnique
  *  * @brief fig62_agent is det
@@ -315,8 +404,11 @@ cabeca_dura(_,goforward).
  *  * @param[out] B The new action from the list.
  *  * @return TRUE always.
  * fig62_agent(_,Action) :-
- *   retract(fig62acts([Action|Actions])),
- *   assert(fig62acts(Actions)).
+ *     retract(fig62acts([Action|Actions])),
+ *     assert(fig62acts(Actions)).
+ *
+ *------------------------------------------------------------------------------
+ * Exemplo de agente aleatorio
  *
  *  * @ingroup GroupUnique
  *  * @brief random_agent is det
@@ -325,7 +417,7 @@ cabeca_dura(_,goforward).
  *  * @param[out] B The action, an aleatory item from the list of possibilities.
  *  * @return TRUE always.
  * random_agent(_,Action) :-
- *   random_member(Action,[goforward,turnleft,turnright,grab,shoot,climb]).
+ *     random_member(Action,[goforward,turnleft,turnright,grab,shoot,climb]).
  */
 
 /* ----------------------------------------------------------------------- */
