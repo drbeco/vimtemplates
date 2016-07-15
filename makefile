@@ -11,7 +11,7 @@
 #	* g:webpage
 #	* g:phone
 
-.PHONY: uninstall install
+.PHONY: uninstall install uninstallvimrc installvimrc
 
 install : ./plugin/vimtemplates.vim ./templates/default.c
 	@echo --- installing vimtemplates
@@ -19,6 +19,8 @@ install : ./plugin/vimtemplates.vim ./templates/default.c
 	mkdir -p ~/.vim/templates/
 	cp ./plugin/vimtemplates.vim ~/.vim/plugin/
 	cp ./templates/* ~/.vim/templates/
+
+installvimrc :
 	echo '" -------------------------------------------------' >> ~/.vimrc
 	echo '" vimtemplates ~/.vimrc configuration, by Dr. Beco:' >> ~/.vimrc
 	echo '"' >> ~/.vimrc
@@ -40,5 +42,7 @@ install : ./plugin/vimtemplates.vim ./templates/default.c
 uninstall :
 	rm -f ~/.vim/plugin/vimtemplates.vim
 	rm -rf ~/.vim/templates/
+
+uninstallvimrc :
 	sed -i 's/.*_vimtemplates_/"&/' ~/.vimrc
 
