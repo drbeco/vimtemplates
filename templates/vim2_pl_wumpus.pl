@@ -17,7 +17,7 @@
  ***************************************************************************
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License.        *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -86,10 +86,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % To define an agent you will need:
-%   use modulo wumpus.pl
-%   init_agent
-%   run_agent
-%   world_setup([Size, Type, Move, Gold, Pit, Bat, [RandS, RandA]])
+%   use module wumpus.pl to load the simulator
+%   init_agent called once at start
+%   run_agent called each turn, gives perceptions to agent and waits an action
+%   world_setup([Size, Type, Move, Gold, Pit, Bat, [RandS, RandA]]) to setup once
 %
 %       +--------+-----------+
 %       |  Type  |    Size   |
@@ -128,6 +128,7 @@
  * @retval TRUE on success.
  * @retval FALSE on fail.
  */
+
 :- use_module(wumpus, [start/0]). % agente usa modulo simulador
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -168,7 +169,7 @@
 % Mundo: 
 %    4x4, quadrado, wumpus anda quando atira ou quando entra na casa dele
 %    probabilidade de ouro 0.1, de buracos 0.2, um unico morcego
-%    agente inicia em casa aleatoria
+%    agente inicia em casa aleatoria [yes]
 %    Maximo de acoes antes de morrer de fome: Size^2x4 = 4x4x4 = 64
 
 /**
@@ -178,6 +179,10 @@
  * @retval Always TRUE (it is a fact).
 */
 world_setup([4, grid, walker, 0.1, 0.2, 1, [yes]]).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Start coding from here
 
 /**
  * @ingroup GroupUnique
