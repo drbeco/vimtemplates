@@ -83,6 +83,7 @@
 #include <stdlib.h> /* Miscellaneous functions (rand, malloc, srand)*/
 #include <getopt.h> /* get options from system argc/argv */
 
+/* To include assert.h for diagnostics, do it after #define DEBUG bellow */
 /* #include <time.h> */ /* Time and date functions */
 /* #include <math.h> */ /* Mathematics functions */
 /* #include <string.h> */ /* Strings functions definitions */
@@ -101,11 +102,13 @@
 /* #include <float.h> */ /* Float constants to help portability */
 /* #include <setjmp.h> */ /* Bypass standard function calls and return */
 /* #include <stddef.h> */ /* Various types and MACROS */
-/* #include <SWI-Prolog.h> */ /* Prolog integration with C */
+/* #include <stdint.h> */ /* Integer types and sizes */
+/* #include <inttypes.h> */ /* Macros for integer types */
 /* #include <ncurses.h> */ /* Screen handling and optimisation functions */
-/* #include <allegro.h> */ /* A game library for graphics, sounds, etc. */
 /* #include <libintl.h> */ /* Internationalization / translation */
 /* #include <locale.h> */ /* MACROS LC_ for location specific settings */
+/* #include <allegro.h> */ /* A game library for graphics, sounds, etc. */
+/* #include <SWI-Prolog.h> */ /* Prolog integration with C */
 /* #include "libeco.h" */ /* I/O, Math, Sound, Color, Portable Linux/Windows */
 /* #include "<+$BASENAME$+>.h" */ /* To be created for this template if needed */
 
