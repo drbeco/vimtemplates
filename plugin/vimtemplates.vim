@@ -2,8 +2,8 @@
 " Copyright GNU GPL v2 - Ruben Carlo Benante <rcb@beco.cc>
 "
 " file: vimtemplates.vim
-" Ruben Carlo Benante <rcb@beco.cc> 2016-06-12
-" http://github.com/drbeco
+" Ruben Carlo Benante <rcb@beco.cc> 2016-06-12, 2017-07-08
+" http://github.com/drbeco/vimtemplates
 "
 " Based originally on the script file-templates.vim
 " by Alan Budden <abudden@gmail.com> 2009-05-21
@@ -51,8 +51,9 @@
 "let g:webpage="www.yoursite.com"
 "let g:phone="+55 (11) 12345-4321"
 "
-"The file path is configurated by:
-"let g:VIMFILESDIR="~/.vim/"
+" OPTIONAL: the file path is configurated by:
+"let g:vimtemplates_dir="dir/where/vimtemplates/are"
+" Don't need to configure it, it will find itself automatically
 "
 " And if you have doxygen installed, you can author as:
 "let g:DoxygenToolkit_authorName=g:author
@@ -60,14 +61,24 @@
 " -----------------------------------------------------------------
 "
 " This file vimtemplates.vim
-" should be installed in the path: ~/.vim/plugin
+" should be installed in the paths: 
+" a) Manually: 
+"   * ~/.vim/plugin
+"   * ~/.vim/templates
+" b) Using plugin manager vim-plug (preferred method)
+" (available at https://github.com/junegunn/vim-plug)
+" Add to your .vimrc vim-plug session:
+" " Vimtemplates - templates for diverse files
+" Plug 'drbeco/vimtemplates'
 "
 " The file templates have a name pattern vimodelX.extension
 " where:
 "   X is a number
 "   extension is some file extension (.c, .cpp, .txt, .md, etc.)
 " 
-" The file templates model should be put in the path: ~/.vim/templates
+" The file templates model should be put in one of the paths:
+"   * ~/.vim/templates (for manually installed) or
+"   * ~/.vim/plugged/vimtemplates/templates (installed with plug-vim)
 "
 " -----------------------------------------------------------------
 " Usage:
@@ -76,6 +87,8 @@
 "   with the vimodel of your choice
 "   TIP: double <TAB> key will show all models available
 "   
+" TODO:
+"  <TAB> auto-complete
 
 let s:TagMatch = '<+\(.\{-1,}\)\(;R\)\?+\+>'
 let s:VarTagMatch = '<+\(\$[A-Z]\+\$\)\(;R\)\?+\+>'
@@ -92,6 +105,12 @@ let s:AskTagDefault["CFLAGS"] = "-Wall -Wextra -g -O0 -c -std=gnu99"
 let s:AskTagDefault["LDLIBS"] = "-lm -lncurses -lpthread -lgmp"
 let g:file_template_default={}
 let g:file_template_default["default"]="default"
+
+" To choose a different location, add to your .vimrc file:
+" let g:vimtemplates_dir="dir/where/vimtemplates/are"
+if !exists("g:vimtemplates_dir")
+    let g:vimtemplates_dir=expand('<sfile>:p:h:h')
+endif
  
 command! -complete=customlist,ListAvailableTemplates -nargs=? 
 			\ LoadTemplate call LoadFileTemplate("<args>")
@@ -106,14 +125,14 @@ function! ListAvailableTemplates(A,L,P)
 	if len(s:bufferFileName) > 0
 		let extension = expand('%:e')
 		if len(extension) > 0
-			let files = split(globpath(g:VIMFILESDIR."templates/", '*.'.extension), '\n')
+			let files = split(globpath(g:vimtemplates_dir."/templates/", '*.'.extension), '\n')
 
 			for f in files
 				let root = fnamemodify(f, ':t:r')
 				let resultDict[root] = ''
 			endfor
 		else
-			let files = split(globpath(g:VIMFILESDIR."templates/", s:bufferFileName.'*'), '\n')
+			let files = split(globpath(g:vimtemplates_dir."/templates/", s:bufferFileName.'*'), '\n')
 			for f in files
 				let root = fnamemodify(f, ':t:r')
 				let resultDict[root] = ''
@@ -145,9 +164,9 @@ function! LoadFileTemplate(name)
 
 	if len(s:bufferFileName) > 0
 		if(len(expand('%:e'))) != 0
-			execute "silent! 0r ".g:VIMFILESDIR."templates/".tolower(template_name).".".expand('%:e')
+			execute "silent! 0r ".g:vimtemplates_dir."/templates/".tolower(template_name).".".expand('%:e')
 		else
-			execute "silent! 0r ".g:VIMFILESDIR."templates/".template_name
+			execute "silent! 0r ".g:vimtemplates_dir."/templates/".template_name
 		endif
 
 		syn match vimTemplateMarker "<+.++>" containedin=ALL
@@ -162,9 +181,9 @@ function! AddTemplate(name)
 
 	if len(s:bufferFileName) > 0
 		if(len(expand('%:e'))) != 0
-			execute "silent! r ".g:VIMFILESDIR."templates/".tolower(template_name).".".expand('%:e')
+			execute "silent! r ".g:vimtemplates_dir."/templates/".tolower(template_name).".".expand('%:e')
 		else
-			execute "silent! r ".g:VIMFILESDIR."templates/".template_name
+			execute "silent! r ".g:vimtemplates_dir."/templates/".template_name
 		endif
 		syn match vimTemplateMarker "<+.++>" containedin=ALL
 		call ExpandTemplateNames()
