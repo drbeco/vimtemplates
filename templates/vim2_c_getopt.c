@@ -82,6 +82,7 @@
 #include <stdio.h> /* Standard I/O functions */
 #include <stdlib.h> /* Miscellaneous functions (rand, malloc, srand)*/
 #include <getopt.h> /* get options from system argc/argv */
+#include <errno.h> /* Error number codes errno */
 
 /* To include assert.h for diagnostics, do it after #define DEBUG bellow */
 /* #include <time.h> */ /* Time and date functions */
@@ -92,7 +93,6 @@
 /* #include <unistd.h> */ /* UNIX standard function */
 /* #include <limits.h> */ /* Various C limits */
 /* #include <ctype.h> */ /* Character functions */
-/* #include <errno.h> */ /* Error number codes errno */
 /* #include <signal.h> */ /* Signal processing */
 /* #include <stdarg.h> */ /* Functions with variable arguments */
 /* #include <pthread.h> */ /* Parallel programming with threads */
