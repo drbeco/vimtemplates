@@ -167,7 +167,8 @@ using namespace std;
 #define SBUFF 256 /* string buffer */
 
 /* ---------------------------------------------------------------------- */
-/* classes */
+/* classes : better located at libxxx.h */
+
 class document
 {
     public:
