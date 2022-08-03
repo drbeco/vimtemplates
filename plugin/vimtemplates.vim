@@ -282,7 +282,7 @@ function! ExpandTemplateNames()
 				\     '$USER$':       expand('$USER'),
 				\     '$AUTHOR$':     exists("g:author") ? g:author : (exists("g:DoxygenToolkit_authorName") ? g:DoxygenToolkit_authorName : (exists("g:username") ? g:username : l:user)),
 				\     '$EMAIL$':      exists("g:email") ? g:email : (l:user . "@" . l:hostn),
-				\     '$WEBPAGE$':    exists("g:webpage") ? g:webpage."\\~".l:user : g:DoxygenToolkit_authorName,
+				\     '$WEBPAGE$':    exists("g:webpage") ? g:webpage . l:user : g:DoxygenToolkit_authorName,
 				\     '$PHONE$':      exists("g:phone") ? g:phone : '(**) *****-****',
 				\ }
 
