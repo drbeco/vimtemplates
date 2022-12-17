@@ -140,25 +140,25 @@ using namespace std;
 /* #include <thread> */ /* (C++11, Thread support library) std::thread class and supporting functions */
 /* #include <stdatomic.h> */ /*(C++23, Compatibility) Defines _Atomic and provides corresponding components in the C stdlib */
 
-/* #include "libeco.h" */ /* I/O, Math, Sound, Color, Portable Linux/Windows */
-/* #include "<+$BASENAME$+>.h" */ /* To be created for this template if needed */
+/* #include "libuser.hpp" */ /* your personal user library together with libuser.cpp */
+/* #include "<+$BASENAME$+>.hpp" */ /* To be created for this template if needed */
 
 /* ---------------------------------------------------------------------- */
 /* definitions */
 
-#ifndef VERSION /* gcc -DVERSION="0.1.160612.142306" */
+#ifndef VERSION /* g++ -DVERSION="0.1.160612.142306" */
 #define VERSION "<+$VERSION$+>" /* Version Number (string) */
 #endif
 
 /* Debug */
-#ifndef DEBUG /* gcc -DDEBUG=1 */
+#ifndef DEBUG /* g++ -DDEBUG=1 */
 #define DEBUG 0 /* Activate/deactivate debug mode */
 #endif
 
 #if DEBUG==0
 #define NDEBUG
 #endif
-/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */ 
+/* #include <assert> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */ 
 
 /* Debug message if DEBUG on */
 #define IFDEBUG(M) if(DEBUG) fprintf(stderr, "[DEBUG file:%s line:%d]: " M "\n", __FILE__, __LINE__); else {;}

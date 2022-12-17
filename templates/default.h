@@ -61,6 +61,12 @@
 #ifndef _<+$UBASENAME$+>_H
 #define _<+$UBASENAME$+>_H
 
+#ifdef __cplusplus
+/* this is not a CPP header, extern C code */
+extern "C"
+{
+#endif
+
 /* ---------------------------------------------------------------------- */
 /* includes */
 
@@ -130,6 +136,10 @@ void copyr(void); /**< Prints copyright information and exit */
 void <+$BASENAME$+>_init(void);  /**< Initializes some operations before start */
 void <+$BASENAME$+>_update(void); /**< Updates values during program cycle */
 
+#ifdef __cplusplus
+/* this is not a C header, extern C code */
+}
+#endif
 #endif /* NOT def _<+$UBASENAME$+>_H */
 
 /* ---------------------------------------------------------------------- */
