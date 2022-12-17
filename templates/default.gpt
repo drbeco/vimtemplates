@@ -1,0 +1,135 @@
+/***************************************************************************
+ *   <+$FILENAME$;R+++++++++++++++++++++++++> Version <+$VERSION$;R+++++++>*
+ *                                                                         *
+ *   <+#BRIEF#;R++++++++++++++++++++++++++++++++++++++++++++++++++++++++++>*
+ *   Copyright (C) <+$YEAR$;R+> by <+$AUTHOR$;R+++++++++++++++++++++++++++>*
+ ***************************************************************************
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************
+ *   To contact the author, please write to:                               *
+ *   <+$AUTHOR$;R+++++++++++++++++++++++++++++++++++++++++++++++++++++++++>*
+ *   Email: <+$EMAIL$;R+++++++++++++++++++++++++++++++++++++++++++++++++++>*
+ *   Webpage: http://<+$WEBPAGE$;R++++++++++++++++++++++++++++++++++++++++>*
+ *   Phone: <+$PHONE$;R+++++++++++++++++++++++++++++++++++++++++++++++++++>*
+ ***************************************************************************/
+
+/*
+ * Instrucoes para compilar:
+ * $gpt <+$BASENAME$+>.gpt -o <+$BASENAME$+>.gpt.x
+ */
+
+/* ---------------------------------------------------------------------- */
+/* algoritmo */
+
+algoritmo exemplo;
+
+/* ---------------------------------------------------------------------- */
+/* variáveis */
+
+variáveis
+	idade : inteiro;
+	salario, r : real;
+	escolha : caractere;
+	nome : literal;
+	resultado : lógico;
+	tabuleiro : matriz[3][3] de inteiros;
+	i, j : inteiro;
+fim-variáveis
+
+/* ---------------------------------------------------------------------- */
+/* rotina principal */
+
+início
+	imprima("Qual o seu nome? ");
+	nome := leia();
+
+	imprima(nome, ", digite sua idade: ");
+	idade := leia();
+
+	se idade >= 18 então
+		se idade < 60 então
+			imprima("adulto, liberado!");
+		senão
+			imprima("idoso, vaga especial.");
+		fim-se
+	senão
+		imprima("menor de idade, entrada recusada!");
+		retorne 0; 
+	fim-se
+
+	imprima("Quer continuar? (s/n)");
+	escolha := leia();
+	se escolha = 'n' ou escolha = 'N' então
+		retorne 0; 
+	fim-se
+
+	imprima("Qual o seu salário?");
+	salario := leia();
+	salario := salario + salario * 1.5;
+	imprima("Seu novo salário após o aumento: ", salario);
+
+	resultado := verdadeiro;
+	imprima("Calculando descontos...");
+	enquanto resultado = verdadeiro faça
+		salario := salario * 0.9;
+		imprima("Novo salário: ", salario);
+		resultado := (salario > 100.1);
+	fim-enquanto
+
+	imprima("Agora vou calcular a raiz quadrada de 9 para você:");
+	r := raiz(9);
+	imprima("A raiz de 9 é: ", r);
+
+    /* preenchendo a matriz tabuleiro */
+    imprima("Preenchendo tabuleiro");
+    para i de 0 até 2 faça
+        para j de 0 até 2 faça
+            tabuleiro[i][j] := i + j;
+        fim-para
+    fim-para
+
+    /* imprimindo o tabuleiro */
+    imprime_matriz(tabuleiro);
+
+fim
+
+/* ---------------------------------------------------------------------- */
+/* funções de usuário */
+
+/* ---------------------------------------------------------------------- */
+/* Encontra a raiz usando o método Newton-Raphson */
+função raiz(num: real) : real
+  xn : real;
+início
+    xn := 3.0;
+    retorne xn;
+fim
+
+/* ---------------------------------------------------------------------- */
+/* Imprime matriz */
+função imprime_matriz(tabuleiro : matriz[3][3] de inteiros)
+	i, j : inteiro;
+início
+    para i de 0 até 2 faça
+        para j de 0 até 2 faça
+            imprima("tabuleiro posição ",i,",",j," é ", tabuleiro[i][j]);
+        fim-para
+    fim-para
+fim
+
+/* ---------------------------------------------------------------------- */
+/* rodapé de configuração do vim                                          */
+/* vi: set ai et ts=4 sw=4 tw=0 wm=0 fo=croql : C config for Vim modeline */
+/* Template by Dr. Beco <rcb at beco dot cc> Version 20160612.142044      */
