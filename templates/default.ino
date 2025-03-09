@@ -53,7 +53,7 @@
 #if DEBUG==0
 #define NDEBUG
 #endif
-/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */ 
+/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */
 
 /* Debug message if DEBUG on */
 #define IFDEBUG(M) if(DEBUG) fprintf(stderr, "[DEBUG file:%s line:%d]: " M "\n", __FILE__, __LINE__); else {;}
@@ -73,7 +73,7 @@ void copyr(void); /* print version and copyright information */
 /* ---------------------------------------------------------------------- */
 /* the setup function runs once when you press reset or power the board
  */
-void setup() 
+void setup()
 {
     pinMode(LED, OUTPUT); // set pin LED (13) to Output
     Serial.begin(9600); // open the serial port at 9600 bps:
@@ -130,7 +130,7 @@ void copyr(void)
     IFDEBUG("copyr()");
     Serial.print("<+$BASENAME$+> Version: ");
     Serial.println(VERSION);
-    Serial.print("Copyright (C) "); 
+    Serial.print("Copyright (C) ");
     Serial.print(<+$YEAR$+>)
     Serial.print(" <+$AUTHOR$+>, ");
     Serial.println("<+$EMAIL$+>");
@@ -140,5 +140,5 @@ void copyr(void)
 
 /* ---------------------------------------------------------------------- */
 /* vi: set ai et ts=4 sw=4 tw=0 wm=0 fo=croql : C config for Vim modeline */
-/* Template by Dr. Beco <rcb at beco dot cc> Version 20160612.142044      */
+/* Template by Dr. Beco <rcb at beco dot cc>      Version 20250309.153530 */
 

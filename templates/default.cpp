@@ -26,10 +26,12 @@
  ***************************************************************************/
 
 /*
- * Instrucoes para compilar:
- *   $ make <+$BASENAME$+>.xpp
- * ou
- *   $ g++ <+$BASENAME$+>.c -o <+$BASENAME$+>.xpp -Wall -Wextra -g -O0 -DDEBUG=1
+ * Compile with make:
+ *   $ make <+$BASENAME$+>.out
+ *
+ * or manually with gcc:
+ *   $ g++ <+$BASENAME$+>.cpp -o <+$BASENAME$+>.out -Wall -Wextra -g -O0
+ * extra options: -DDEBUG=1
  */
 
 /* ---------------------------------------------------------------------- */
@@ -89,7 +91,7 @@ class document
 /* methods */
 
 /* ---------------------------------------------------------------------- */
-/* Prints help information 
+/* Prints help information
  *  usually called by opt -h or --help
  */
 void document::help(void)
@@ -107,7 +109,7 @@ void document::help(void)
 }
 
 /* ---------------------------------------------------------------------- */
-/* Prints version and copyright information 
+/* Prints version and copyright information
  *  usually called by opt -V
  */
 void document::copyr(void)
@@ -120,8 +122,8 @@ void document::copyr(void)
 
 /* ---------------------------------------------------------------------- */
 /* This function does ...
- * 
- * It receives as input ... 
+ *
+ * It receives as input ...
  *
  * It returns ...
  */
@@ -135,7 +137,7 @@ int main(void)
     /* code */
     doc.help();
     doc.copyr();
-  
+
     /* ...and we are done */
     return 0;
 }
@@ -144,5 +146,5 @@ int main(void)
 
 /* ---------------------------------------------------------------------- */
 /* vi: set ai et ts=4 sw=4 tw=0 wm=0 fo=croql : CPP config - Vim modeline */
-/* Template by Dr. Beco <rcb at beco dot cc> Version 20220718.172615      */
+/* Template by Dr. Beco <rcb at beco dot cc>      Version 20250309.153530 */
 

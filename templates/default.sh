@@ -41,12 +41,13 @@
 # *  <+$EMAIL$;R+++++++++++++++++++++++++++++++++++++++++++++++++++++++++> *
 # **************************************************************************
 
+# The Help Function
 Help()
 {
     cat << EOF
     <+$BASENAME$+> - <+#BRIEF#+>
-    Usage: ${1} [-v] ( [-h|-V] | -a n -i m [-w url] )
-  
+    Usage: ${0} [-v] ( [-h|-V] | -a n -i m [-w url] )
+
     Options:
       -h, --help       Show this help.
       -V, --version    Show version.
@@ -54,29 +55,30 @@ Help()
       -a, --max        Set max value to n.
       -i, --min        Set min value to m.
       -w, --www        Set URL to ping.
+
     Exit status:
        0, if ok.
        1, some error occurred.
-  
+
     Restriction: max > min.
-  
+
     Todo:
             Long options not implemented yet.
-  
+
     Author:
-            Written by <+$AUTHOR$+> <<+$EMAIL$+>>  
+            Written by <+$AUTHOR$+> <<+$EMAIL$+>>
 
 EOF
     exit 1
 }
-# Another usage function example
-# usage() { echo "Usage: $0 [-h | -c] | [-a n -i m], being n>m" 1>&2; exit 1; }
 
+# The Copyright and Version Function
 Copyr()
 {
+    THISYEAR=$(date +"%Y")
     echo '<+$BASENAME$+> - <+$VERSION$+>'
     echo
-    echo 'Copyright (C) <+$YEAR$+> <+$AUTHOR$+> <<+$EMAIL$+>>, GNU GPL version 2'
+    echo "Copyright (C) <+$YEAR$+> - $THISYEAR, <+$AUTHOR$+> <<+$EMAIL$+>>, GNU GPL version 2"
     echo '<http://gnu.org/licenses/gpl.html>. This  is  free  software:  you are free to change and'
     echo 'redistribute it. There is NO WARRANTY, to the extent permitted by law. USE IT AS IT IS. The author'
     echo 'takes no responsability to any damage this software may inflige in your data.'
@@ -84,11 +86,12 @@ Copyr()
     exit 1
 }
 
-# Example of a function
+# The Main Function
 main()
 {
+    # initialization of variables
     verbose=0
-    #getopt example with switch/case
+    # getopt loop
     while getopts "hVva:i:w:" FLAG; do
         case $FLAG in
             h)
@@ -114,7 +117,8 @@ main()
                 ;;
         esac
     done
-  
+
+    # validation of arg options
     if [ -z "$max" ] || [ -z "$min" ]; then
         Help
     fi
@@ -122,19 +126,20 @@ main()
         echo "Restriction: Max > Min"
         exit 1
     fi
-  
-    echo Starting <+$FILENAME$+> script, by <+$USER$+>, version <+$VERSION$+>...
-  
-    echo Verbose level: $verbose
-  
-    #for example
+
+    if [ "$verbose" -gt 0 ] ; then
+        echo Starting <+$FILENAME$+> script, by <+$USER$+>, version <+$VERSION$+>...
+        echo Verbose level: $verbose
+    fi
+
+    # for example
     echo list of files:
     for i in $( ls ); do
         echo item: $i
     done
     echo
-  
-    #echo read from stdin
+
+    # echo read from stdin
     backupfile=/home/$USER/$(date +%Y%m%d)-documents-backup.tgz
     echo Issuing command: tar -cZf $backupfile /home/$USER/Documents
     read Opt
@@ -144,16 +149,16 @@ main()
     else
         echo Thanks god I dont need to work today\!
     fi
-    
-     #while counter example
+
+    # while counter example
     COUNTER=2
     while [  "$COUNTER" -gt 0 ]; do
         echo The counter is $COUNTER seconds
         let COUNTER=COUNTER-1
         sleep 1 # wait 1 second
     done
-    
-    #Menu
+
+    # Menu
     if [ -z "$www" ]; then
         echo Please chose an option number:
         OPTIONS="Google Yahoo Facebook Quit"
@@ -177,7 +182,7 @@ main()
             fi
         done
     fi
-    
+
     echo Pinging $www
     ping -c1 $www 2>/dev/null  1>/dev/null
     pingstatus=$?
@@ -187,16 +192,16 @@ main()
     else
         echo ping ok
     fi
-    
+
     echo Bye main
 }
 
-#Calling main with all args
+# Calling main with all args
 main "$@"
 echo Bye script
 exit 0
 
 #/* -------------------------------------------------------------------------- */
 #/* vi: set ai et ts=4 sw=4 tw=0 wm=0 fo=croql syn=sh : SH config Vim modeline */
-#/* Template by Dr. Beco <rcb at beco dot cc>          Version 20190318.122053 */
+#/* Template by Dr. Beco <rcb at beco dot cc>          Version 20250309.153530 */
 

@@ -30,7 +30,7 @@
  * \file <+$FILENAME$+>
  * \ingroup GroupUnique
  * \brief <+#BRIEF#+>
- * \details This is a CPP Header File with HPP extension 
+ * \details This is a CPP Header File with HPP extension
  * \version <+$VERSION$+>
  * \date <+$DATE$+>
  * \author <+$AUTHOR$+> <<<+$EMAIL$+>>>
@@ -187,7 +187,7 @@ using namespace std;
 #if DEBUG==0
 #define NDEBUG
 #endif
-/* #include <cassert> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */ 
+/* #include <cassert> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */
 
 /* Debug message if DEBUG on */
 #define IFDEBUG(M) if(DEBUG) fprintf(stderr, "[DEBUG file:%s line:%d]: " M "\n", __FILE__, __LINE__); else {;}
@@ -216,5 +216,5 @@ class document
 
 /* ---------------------------------------------------------------------- */
 /* vi: set ai et ts=4 sw=4 tw=0 wm=0 fo=croql : CPP config - Vim modeline */
-/* Template by Dr. Beco <rcb at beco dot cc> Version 20220718.172615      */
+/* Template by Dr. Beco <rcb at beco dot cc>      Version 20250309.153530 */
 

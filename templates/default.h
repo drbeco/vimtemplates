@@ -115,7 +115,7 @@ extern "C"
 #if DEBUG==0
 #define NDEBUG
 #endif
-/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */ 
+/* #include <assert.h> */ /* Verify assumptions with assert. Turn off with #define NDEBUG */
 
 /** @brief Debug message if DEBUG on */
 #define IFDEBUG(M) if(DEBUG) fprintf(stderr, "[DEBUG file:%s line:%d]: " M "\n", __FILE__, __LINE__); else {;}
@@ -144,4 +144,5 @@ void <+$BASENAME$+>_update(void); /**< Updates values during program cycle */
 
 /* ---------------------------------------------------------------------- */
 /* vi: set ai et ts=4 sw=4 tw=0 wm=0 fo=croql : C config for Vim modeline */
-/* Template by Dr. Beco <rcb at beco dot cc> Version 20160615.020326      */
+/* Template by Dr. Beco <rcb at beco dot cc>      Version 20250309.153530 */
+
